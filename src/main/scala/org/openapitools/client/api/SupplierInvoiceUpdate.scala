@@ -1,0 +1,40 @@
+package org.openapitools.client.api
+
+import argonaut._
+import argonaut.EncodeJson._
+import argonaut.DecodeJson._
+
+import org.http4s.{EntityDecoder, EntityEncoder}
+import org.http4s.argonaut._
+import org.joda.time.DateTime
+
+import java.time.LocalDate
+
+import SupplierInvoiceUpdate._
+
+case class SupplierInvoiceUpdate (
+  currency: Option[String],
+/* References the goods receipt entity. */
+  goodsReceiptId: Option[String],
+invoiceDate: Option[LocalDate],
+invoiceNumber: Option[String],
+/* JSON array of `{product_id, name, quantity, unitPriceNet, taxRate}`. */
+  lineItems: Option[AnyType],
+notes: Option[String],
+/* References the purchase order entity. */
+  purchaseOrderId: Option[String],
+/* One of: draft | matched | has_variances | posted | cancelled */
+  status: Option[SupplierInvoiceStatus],
+/* References the supplier entity. */
+  supplierContactId: Option[String],
+supplierName: Option[String],
+totalGrossAmount: Option[String],
+totalNetAmount: Option[String])
+
+object SupplierInvoiceUpdate {
+  import DateTimeCodecs._
+
+  implicit val SupplierInvoiceUpdateCodecJson: CodecJson[SupplierInvoiceUpdate] = CodecJson.derive[SupplierInvoiceUpdate]
+  implicit val SupplierInvoiceUpdateDecoder: EntityDecoder[SupplierInvoiceUpdate] = jsonOf[SupplierInvoiceUpdate]
+  implicit val SupplierInvoiceUpdateEncoder: EntityEncoder[SupplierInvoiceUpdate] = jsonEncoderOf[SupplierInvoiceUpdate]
+}

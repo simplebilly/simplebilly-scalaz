@@ -1,0 +1,247 @@
+package org.openapitools.client.api
+
+import argonaut._
+import argonaut.EncodeJson._
+import argonaut.DecodeJson._
+
+import java.io.File
+import java.net.URLEncoder
+import java.util.UUID
+
+import org.http4s._
+import org.http4s.{EntityDecoder, EntityEncoder}
+import org.http4s.argonaut._
+import org.http4s.client._
+import org.http4s.client.blaze.PooledHttp1Client
+import org.http4s.headers._
+
+import org.joda.time.DateTime
+
+import scalaz.concurrent.Task
+
+import HelperCodecs._
+
+import org.openapitools.client.api.AnyType
+import org.openapitools.client.api.PluginError
+import org.openapitools.client.api.ProductCategory
+
+object ProductCategoryApi {
+
+  val client = PooledHttp1Client()
+
+  def escape(value: String): String = URLEncoder.encode(value, "utf-8").replaceAll("\\+", "%20")
+
+  def createProductCategory(host: String, productCategory: ProductCategory): Task[ProductCategory] = {
+    implicit val returnTypeDecoder: EntityDecoder[ProductCategory] = jsonOf[ProductCategory]
+
+    val path = "/api/v1/product-categories"
+
+    val httpMethod = Method.POST
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(host + path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType)).withBody(productCategory)
+      resp          <- client.expect[ProductCategory](req)
+
+    } yield resp
+  }
+
+  def deleteProductCategory(host: String, categoryId: String): Task[Unit] = {
+    val path = "/api/v1/product-categories/{category_id}".replaceAll("\\{" + "category_id" + "\\}",escape(categoryId.toString))
+
+    val httpMethod = Method.DELETE
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(host + path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType))
+      resp          <- client.fetch[Unit](req)(_ => Task.now(()))
+
+    } yield resp
+  }
+
+  def getProductCategory(host: String, categoryId: String): Task[ProductCategory] = {
+    implicit val returnTypeDecoder: EntityDecoder[ProductCategory] = jsonOf[ProductCategory]
+
+    val path = "/api/v1/product-categories/{category_id}".replaceAll("\\{" + "category_id" + "\\}",escape(categoryId.toString))
+
+    val httpMethod = Method.GET
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(host + path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType))
+      resp          <- client.expect[ProductCategory](req)
+
+    } yield resp
+  }
+
+  def listProductCategories(host: String): Task[List[ProductCategory]] = {
+    implicit val returnTypeDecoder: EntityDecoder[List[ProductCategory]] = jsonOf[List[ProductCategory]]
+
+    val path = "/api/v1/product-categories"
+
+    val httpMethod = Method.GET
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(host + path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType))
+      resp          <- client.expect[List[ProductCategory]](req)
+
+    } yield resp
+  }
+
+  def updateProductCategory(host: String, categoryId: String, body: AnyType): Task[ProductCategory] = {
+    implicit val returnTypeDecoder: EntityDecoder[ProductCategory] = jsonOf[ProductCategory]
+
+    val path = "/api/v1/product-categories/{category_id}".replaceAll("\\{" + "category_id" + "\\}",escape(categoryId.toString))
+
+    val httpMethod = Method.PUT
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(host + path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType)).withBody(body)
+      resp          <- client.expect[ProductCategory](req)
+
+    } yield resp
+  }
+
+}
+
+class HttpServiceProductCategoryApi(service: HttpService) {
+  val client = Client.fromHttpService(service)
+
+  def escape(value: String): String = URLEncoder.encode(value, "utf-8").replaceAll("\\+", "%20")
+
+  def createProductCategory(productCategory: ProductCategory): Task[ProductCategory] = {
+    implicit val returnTypeDecoder: EntityDecoder[ProductCategory] = jsonOf[ProductCategory]
+
+    val path = "/api/v1/product-categories"
+
+    val httpMethod = Method.POST
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType)).withBody(productCategory)
+      resp          <- client.expect[ProductCategory](req)
+
+    } yield resp
+  }
+
+  def deleteProductCategory(categoryId: String): Task[Unit] = {
+    val path = "/api/v1/product-categories/{category_id}".replaceAll("\\{" + "category_id" + "\\}",escape(categoryId.toString))
+
+    val httpMethod = Method.DELETE
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType))
+      resp          <- client.fetch[Unit](req)(_ => Task.now(()))
+
+    } yield resp
+  }
+
+  def getProductCategory(categoryId: String): Task[ProductCategory] = {
+    implicit val returnTypeDecoder: EntityDecoder[ProductCategory] = jsonOf[ProductCategory]
+
+    val path = "/api/v1/product-categories/{category_id}".replaceAll("\\{" + "category_id" + "\\}",escape(categoryId.toString))
+
+    val httpMethod = Method.GET
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType))
+      resp          <- client.expect[ProductCategory](req)
+
+    } yield resp
+  }
+
+  def listProductCategories(): Task[List[ProductCategory]] = {
+    implicit val returnTypeDecoder: EntityDecoder[List[ProductCategory]] = jsonOf[List[ProductCategory]]
+
+    val path = "/api/v1/product-categories"
+
+    val httpMethod = Method.GET
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType))
+      resp          <- client.expect[List[ProductCategory]](req)
+
+    } yield resp
+  }
+
+  def updateProductCategory(categoryId: String, body: AnyType): Task[ProductCategory] = {
+    implicit val returnTypeDecoder: EntityDecoder[ProductCategory] = jsonOf[ProductCategory]
+
+    val path = "/api/v1/product-categories/{category_id}".replaceAll("\\{" + "category_id" + "\\}",escape(categoryId.toString))
+
+    val httpMethod = Method.PUT
+    val contentType = `Content-Type`(MediaType.`application/json`)
+    val headers = Headers(
+      )
+    val queryParams = Query(
+      )
+
+    for {
+      uri           <- Task.fromDisjunction(Uri.fromString(path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request(method = httpMethod, uri = uriWithParams, headers = headers.put(contentType)).withBody(body)
+      resp          <- client.expect[ProductCategory](req)
+
+    } yield resp
+  }
+
+}
